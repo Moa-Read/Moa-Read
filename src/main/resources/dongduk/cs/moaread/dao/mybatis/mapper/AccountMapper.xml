@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.AccountMapper">
+    <insert id="insertAccount" parameterType="Account">
+        INSERT INTO ACCOUNT
+            (ID, PASSWORD, NAME, PHONE, EMAIL, ADDRESS, DETAILED_ADDRESS, ZIP, STATUS, ROLE, CREATED_AT, UPDATED_AT, BLOG_URL)
+        VALUES
+            (#{id}, #{password}, #{name}, #{phone}, #{email}, #{address}, #{detailedAddress}, #{zip} ,#{status}, #{role}, #{createdAt}, #{updatedAt}, #{blogUrl})
+    </insert>
+
+    <select id="findAccountById" resultType="Account">
+        SELECT *
+        FROM ACCOUNT
+        WHERE ID = #{id}
+    </select>
+</mapper>
