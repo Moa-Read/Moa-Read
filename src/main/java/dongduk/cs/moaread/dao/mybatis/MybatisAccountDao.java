@@ -19,4 +19,8 @@ public class MybatisAccountDao implements AccountDao {
     public Account findAccountById(String id) throws DataAccessException {
         return accountMapper.findAccountById(id);
     }
+
+    public int updateAccount(Account account) throws DataAccessException {
+        return accountMapper.updateAccount(account);
+    }
 }
