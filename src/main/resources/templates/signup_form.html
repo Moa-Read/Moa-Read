@@ -56,7 +56,9 @@
                 <input type="text" class="form-control" th:field="*{zip}">
                 <div th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}" class="text-danger"></div>
             </div>
-            <button type="submit" class="btn btn-primary">회원 가입</button>
+            <div class="text-center p-5">
+                <button type="submit" class="btn btn-primary">회원 가입</button>
+            </div>
         </form>
     </div>
 </body>

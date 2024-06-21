@@ -12,7 +12,7 @@
     <select id="findAccountById" resultType="Account">
         SELECT *
         FROM ACCOUNT
-        WHERE ID = #{id}
+        WHERE ID = #{id} AND STATUS = 'ACTIVE'
     </select>
 
     <update id="updateAccount" parameterType="Account">
