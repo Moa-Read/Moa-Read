@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin: 0;
+            color: #0066cc;
+        }
+        p {
+            margin: 5px 0;
+        }
+        img {
+            max-width: 100px;
+            margin-right: 10px;
+            float: left;
+        }
+        .book-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        .book-details {
+            margin-left: 120px;
+        }
+    </style>
+</head>
+<body>
+<h1>Book Search Results</h1>
+<ul>
+    <li th:if="${items == null || #lists.isEmpty(items)}">
+        No items found.
+    </li>
+    <li th:each="item : ${items}">
+        <div class="book-item">
+            <a th:href="${item.get('link').asText()}" target="_blank">
+                <img th:src="${item.get('image').asText()}" alt="Book Image">
+            </a>
+            <div class="book-details">
+                <h2 th:text="${item.get('title').asText()}">Title</h2>
+                <p><strong>Author:</strong> <span th:text="${item.get('author').asText()}">Author</span></p>
+                <p><strong>Publisher:</strong> <span th:text="${item.get('publisher').asText()}">Publisher</span></p>
+                <p><strong>Publish Date:</strong> <span th:text="${item.get('pubdate').asText()}">Publish Date</span></p>
+                <p><strong>Description:</strong> <span th:text="${item.get('description').asText()}">Description</span></p>
+            </div>
+        </div>
+    </li>
+</ul>
+</body>
+</html>

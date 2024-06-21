@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.BookMapper">
+    <insert id="insertBook" parameterType="Book">
+        INSERT INTO BOOK
+        (ISBN, TITLE, AUTHOR, TRANSLATOR, PUBLISHER, PUBLISH_DATE, DESCRIPTION, PRICE, IMAGE)
+        VALUES
+            (#{isbn}, #{title}, #{author}, #{translator,jdbcType=VARCHAR}, #{publisher}, #{publishDate}, #{description}, #{price}, #{image})
+    </insert>
+
+    <select id="findByIsbn" resultType="Book">
+        SELECT *
+        FROM BOOK
+        WHERE ISBN = #{isbn}
+    </select>
+</mapper>
