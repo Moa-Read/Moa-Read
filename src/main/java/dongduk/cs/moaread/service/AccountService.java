@@ -5,6 +5,7 @@ import dongduk.cs.moaread.domain.Account;
 import dongduk.cs.moaread.domain.enums.Role;
 import dongduk.cs.moaread.domain.enums.Status;
 import dongduk.cs.moaread.dto.account.request.SignupReqDto;
+import dongduk.cs.moaread.dto.account.response.ProfileResDto;
 import dongduk.cs.moaread.exception.DuplicatedIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -65,6 +66,7 @@ public class AccountService implements UserDetailsService {
         return false;
     }
 
+    /* 로그인 */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountDao.findAccountById(username);
@@ -82,5 +84,21 @@ public class AccountService implements UserDetailsService {
         }
 
         return new User(account.getId(), account.getPassword(), authorities);
+    }
+
+    /* 프로필 조회 */
+    public ProfileResDto getProfile(String id) {
+        Account account = accountDao.findAccountById(id);
+
+        ProfileResDto profileResDto = new ProfileResDto();
+        profileResDto.setId(account.getId());
+        profileResDto.setName(account.getName());
+        profileResDto.setPhone(account.getPhone());
+        profileResDto.setEmail(account.getEmail());
+        profileResDto.setAddress(account.getAddress());
+        profileResDto.setDetailedAddress(account.getDetailedAddress());
+        profileResDto.setZip(account.getZip());
+
+        return profileResDto;
     }
 }
