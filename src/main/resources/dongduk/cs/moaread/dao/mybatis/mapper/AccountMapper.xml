@@ -27,4 +27,10 @@
         UPDATED_AT = #{updatedAt}
         WHERE ID = #{id}
     </update>
+
+    <update id="updateStatus">
+        UPDATE ACCOUNT
+        SET STATUS = 'INACTIVE'
+        WHERE ID = #{id}
+    </update>
 </mapper>

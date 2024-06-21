@@ -10,4 +10,6 @@ public interface AccountMapper {
     Account findAccountById(String id);
 
     int updateAccount(Account account);
+
+    int updateStatus(String id);
 }

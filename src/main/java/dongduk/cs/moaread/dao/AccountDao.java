@@ -9,4 +9,6 @@ public interface AccountDao {
     Account findAccountById(String id) throws DataAccessException;
 
     int updateAccount(Account account) throws DataAccessException;
+
+    int updateStatus(String id) throws DataAccessException;
 }
