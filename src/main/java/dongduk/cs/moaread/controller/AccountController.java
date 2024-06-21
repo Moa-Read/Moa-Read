@@ -43,4 +43,10 @@ public class AccountController {
 
         return "redirect:/";
     }
+
+    /* 로그인 */
+    @GetMapping("/login")
+    public String login() {
+        return "login_form";
+    }
 }
