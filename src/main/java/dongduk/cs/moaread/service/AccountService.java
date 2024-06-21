@@ -7,14 +7,22 @@ import dongduk.cs.moaread.domain.enums.Status;
 import dongduk.cs.moaread.dto.account.request.SignupReqDto;
 import dongduk.cs.moaread.exception.DuplicatedIdException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AccountService {
+public class AccountService implements UserDetailsService {
     private final AccountDao accountDao;
     private final PasswordEncoder passwordEncoder;
 
@@ -55,5 +63,24 @@ public class AccountService {
         }
 
         return false;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account = accountDao.findAccountById(username);
+
+        if (account == null) {
+            throw new UsernameNotFoundException("사용자가 존재하지 않습니다.");
+        }
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if ("admin".equals(username)) {
+            authorities.add(new SimpleGrantedAuthority(("ADMIN")));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("USER"));
+        }
+
+        return new User(account.getId(), account.getPassword(), authorities);
     }
 }
