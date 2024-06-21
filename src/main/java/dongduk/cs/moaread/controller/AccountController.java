@@ -7,6 +7,7 @@ import dongduk.cs.moaread.exception.DuplicatedIdException;
 import dongduk.cs.moaread.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,6 @@ public class AccountController {
     @PostMapping("/signup")
     public String signUp(@Valid @ModelAttribute("signupDto") SignupReqDto signupReqDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
             return "signup_form";
         }
 
@@ -55,30 +55,20 @@ public class AccountController {
     }
 
     /* 프로필 조회 */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
     public String getProfile(Model model, Principal principal) {
-        String id = principal.getName();
-
-        if (id == null) {
-            return "login_form";
-        }
-
-        ProfileResDto profileResDto = accountService.getProfile(id);
+        ProfileResDto profileResDto = accountService.getProfile(principal.getName());
         model.addAttribute("profile", profileResDto);
 
         return "profile";
     }
 
     /* 회원 정보 수정 Form */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/update")
     public String updateProfile(Model model, Principal principal) {
-        String id = principal.getName();
-
-        if (id == null) {
-            return "login_form";
-        }
-
-        ProfileResDto profileResDto = accountService.getProfile(id);
+        ProfileResDto profileResDto = accountService.getProfile(principal.getName());
 
         UpdateReqDto updateReqDto = new UpdateReqDto();
         updateReqDto.setName(profileResDto.getName());
@@ -94,33 +84,22 @@ public class AccountController {
     }
 
     /* 회원 정보 수정 */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/update")
     public String updateProfile(@Valid @ModelAttribute("updateDto") UpdateReqDto updateReqDto, BindingResult bindingResult, Principal principal) {
-        String id = principal.getName();
-
-        if (id == null) {
-            return "login_form";
-        }
-
         if (bindingResult.hasErrors()) {
             return "update_form";
         }
-
-        accountService.updateProfile(id, updateReqDto);
+        accountService.updateProfile(principal.getName(), updateReqDto);
 
         return "redirect:/user/profile";
     }
 
     /* 회원 탈퇴 */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/withdraw")
     public String withdraw(Principal principal) {
-         String id = principal.getName();
-
-         if (id == null) {
-             return "login_form";
-         }
-
-         accountService.withdraw(id);
+         accountService.withdraw(principal.getName());
 
          return "redirect:/user/logout";
     }
