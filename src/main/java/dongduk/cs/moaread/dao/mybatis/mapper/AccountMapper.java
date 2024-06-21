@@ -8,4 +8,6 @@ public interface AccountMapper {
     int insertAccount(Account account);
 
     Account findAccountById(String id);
+
+    int updateAccount(Account account);
 }

@@ -5,6 +5,7 @@ import dongduk.cs.moaread.domain.Account;
 import dongduk.cs.moaread.domain.enums.Role;
 import dongduk.cs.moaread.domain.enums.Status;
 import dongduk.cs.moaread.dto.account.request.SignupReqDto;
+import dongduk.cs.moaread.dto.account.request.UpdateReqDto;
 import dongduk.cs.moaread.dto.account.response.ProfileResDto;
 import dongduk.cs.moaread.exception.DuplicatedIdException;
 import lombok.RequiredArgsConstructor;
@@ -100,5 +101,21 @@ public class AccountService implements UserDetailsService {
         profileResDto.setZip(account.getZip());
 
         return profileResDto;
+    }
+
+    /* 회원 정보 수정 */
+    public int updateProfile(String id, UpdateReqDto updateReqDto) {
+        Account updateAccount = new Account();
+        updateAccount.setId(id);
+        updateAccount.setPassword(passwordEncoder.encode(updateReqDto.getPassword()));
+        updateAccount.setName(updateReqDto.getName());
+        updateAccount.setPhone(updateReqDto.getPhone());
+        updateAccount.setEmail(updateReqDto.getEmail());
+        updateAccount.setAddress(updateReqDto.getAddress());
+        updateAccount.setDetailedAddress(updateReqDto.getDetailedAddress());
+        updateAccount.setZip(updateReqDto.getZip());
+        updateAccount.setUpdatedAt(LocalDateTime.now());
+
+        return accountDao.updateAccount(updateAccount);
     }
 }

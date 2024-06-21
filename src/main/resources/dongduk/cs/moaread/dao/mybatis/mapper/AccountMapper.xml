@@ -14,4 +14,17 @@
         FROM ACCOUNT
         WHERE ID = #{id}
     </select>
+
+    <update id="updateAccount" parameterType="Account">
+        UPDATE ACCOUNT SET
+        PASSWORD = #{password},
+        NAME = #{name},
+        PHONE = #{phone},
+        EMAIL = #{email},
+        ADDRESS = #{address},
+        DETAILED_ADDRESS = #{detailedAddress},
+        ZIP = #{zip},
+        UPDATED_AT = #{updatedAt}
+        WHERE ID = #{id}
+    </update>
 </mapper>
