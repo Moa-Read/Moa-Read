@@ -118,4 +118,9 @@ public class AccountService implements UserDetailsService {
 
         return accountDao.updateAccount(updateAccount);
     }
+
+    /* 회원 탈퇴 */
+    public int withdraw(String id) {
+        return accountDao.updateStatus(id);
+    }
 }

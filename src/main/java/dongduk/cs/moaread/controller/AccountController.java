@@ -110,4 +110,18 @@ public class AccountController {
 
         return "redirect:/user/profile";
     }
+
+    /* 회원 탈퇴 */
+    @GetMapping("/withdraw")
+    public String withdraw(Principal principal) {
+         String id = principal.getName();
+
+         if (id == null) {
+             return "login_form";
+         }
+
+         accountService.withdraw(id);
+
+         return "redirect:/user/logout";
+    }
 }
