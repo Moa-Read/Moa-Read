@@ -34,13 +34,13 @@ public class NaverBookSearchService {
     private final BookDao bookDao;
     private final RestTemplate restTemplate;
 
-    public List<Book> searchBooks(String query) {
+    public List<Book> searchBooks(String query, String sort) {
         List<Book> books = new ArrayList<>();
         String apiURL = "https://openapi.naver.com/v1/search/book.json";
         query = java.net.URLEncoder.encode(query, java.nio.charset.StandardCharsets.UTF_8);
         int display = 100;  // 최대 100개 결과 요청
 
-        String url = apiURL + "?query=" + query + "&display=" + display;
+        String url = apiURL + "?query=" + query + "&display=" + display + "&sort=" + sort;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Naver-Client-Id", clientId);
