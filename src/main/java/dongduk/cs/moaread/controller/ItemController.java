@@ -3,13 +3,15 @@ package dongduk.cs.moaread.controller;
 import dongduk.cs.moaread.dto.item.request.CreateItemReqDto;
 import dongduk.cs.moaread.dto.item.request.UpdateItemReqDto;
 import dongduk.cs.moaread.service.ItemService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,22 +21,25 @@ public class ItemController {
 
     /* 아이템 등록 Form */
     @GetMapping("/create")
-    public String createItemForm(Model model) {
+    public String createItemForm(Model model, Principal principal) {
+        if (!isAdmin(principal)) {
+            return "error/unauthorized";
+        }
         model.addAttribute("itemDto", new CreateItemReqDto());
         return "create_item_form";
     }
 
     /* 아이템 등록 */
     @PostMapping("/create")
+    @PreAuthorize("isAuthenticated()")
     public String createItem(@Valid @ModelAttribute("itemDto") CreateItemReqDto itemReqDto,
-                             BindingResult bindingResult, HttpSession session) {
+                             BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "create_item_form";
         }
 
-        if (!isAdmin(session)) {
-            bindingResult.reject("authorization", "관리자 권한이 필요합니다.");
-            return "create_item_form";
+        if (!isAdmin(principal)) {
+            return "error/unauthorized";
         }
 
         itemService.createItem(itemReqDto);
@@ -43,9 +48,9 @@ public class ItemController {
 
     /* 아이템 수정 Form */
     @GetMapping("/update/{id}")
-    public String updateItemForm(@PathVariable int id, Model model, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/item/list";
+    public String updateItemForm(@PathVariable int id, Model model, Principal principal) {
+        if (!isAdmin(principal)) {
+            return "error/unauthorized";
         }
 
         model.addAttribute("itemDto", itemService.getItemById(id));
@@ -54,15 +59,15 @@ public class ItemController {
 
     /* 아이템 수정 */
     @PostMapping("/update/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String updateItem(@PathVariable int id, @Valid @ModelAttribute("itemDto") UpdateItemReqDto itemReqDto,
-                             BindingResult bindingResult, HttpSession session) {
+                             BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "update_item_form";
         }
 
-        if (!isAdmin(session)) {
-            bindingResult.reject("authorization", "관리자 권한이 필요합니다.");
-            return "update_item_form";
+        if (!isAdmin(principal)) {
+            return "error/unauthorized";
         }
 
         itemService.updateItem(id, itemReqDto);
@@ -71,10 +76,10 @@ public class ItemController {
 
     /* 아이템 삭제 */
     @GetMapping("/delete/{id}")
-    public String deleteItem(@PathVariable int id, HttpSession session, Model model) {
-        if (!isAdmin(session)) {
-            model.addAttribute("authorizationError", "관리자 권한이 필요합니다.");
-            return "item_list";
+    @PreAuthorize("isAuthenticated()")
+    public String deleteItem(@PathVariable int id, Principal principal) {
+        if (!isAdmin(principal)) {
+            return "error/unauthorized";
         }
 
         itemService.deleteItem(id);
@@ -88,8 +93,7 @@ public class ItemController {
         return "item_list";
     }
 
-    private boolean isAdmin(HttpSession session) {
-        Object role = session.getAttribute("userRole");
-        return role != null && role.equals("ADMIN");
+    private boolean isAdmin(Principal principal) {
+        return principal != null && principal.getName().equals("admin");
     }
 }
