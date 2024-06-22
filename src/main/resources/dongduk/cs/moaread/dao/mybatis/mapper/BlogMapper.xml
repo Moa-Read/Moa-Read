@@ -25,4 +25,10 @@
         FROM BLOG, ACCOUNT
         WHERE ACCOUNT.STATUS = 'ACTIVE'
     </select>
+
+    <select id="getBlogByUserId" resultType="Blog">
+        SELECT URL, NAME, DESCRIPTION, USER_ID
+        FROM BLOG
+        WHERE USER_ID = #{userId}
+    </select>
 </mapper>

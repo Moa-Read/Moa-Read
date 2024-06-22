@@ -12,4 +12,6 @@ public interface BlogMapper {
     List<Blog> getAllBlogList(Integer pageNum, Integer pageSize);
 
     int getAllBlogCount();
+
+    Blog getBlogByUserId(String userId);
 }
