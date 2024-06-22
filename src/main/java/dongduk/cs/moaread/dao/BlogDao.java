@@ -11,4 +11,6 @@ public interface BlogDao {
     List<Blog> getAllBlogList(Integer pageNum, Integer pageSize) throws DataAccessException;
 
     int getAllBlogCount() throws DataAccessException;
+
+    Blog getBlogByUserId(String userId) throws DataAccessException;
 }

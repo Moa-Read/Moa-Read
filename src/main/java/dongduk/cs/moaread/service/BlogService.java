@@ -21,4 +21,9 @@ public class BlogService {
     public int getAllBlogCount() {
         return blogDao.getAllBlogCount();
     }
+
+    /* 블로그 상세 조회 */
+    public Blog getBlog(String userId) {
+        return blogDao.getBlogByUserId(userId);
+    }
 }

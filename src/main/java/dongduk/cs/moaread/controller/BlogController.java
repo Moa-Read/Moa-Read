@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -32,5 +33,15 @@ public class BlogController {
         model.addAttribute("totalPage", totalPage);
 
         return "blog_list";
+    }
+
+    /* 블로그 상세 조회 */
+    @GetMapping("/{userId}")
+    public String getBlog(@PathVariable String userId, Model model) {
+        Blog blog = blogService.getBlog(userId);
+
+        model.addAttribute("blog", blog);
+
+        return "blog";
     }
 }
