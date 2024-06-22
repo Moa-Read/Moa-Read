@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UpdateItemReqDto {
+    private int id;
+
     @NotBlank(message = "상태는 필수 입력값입니다.")
     private String state;
 

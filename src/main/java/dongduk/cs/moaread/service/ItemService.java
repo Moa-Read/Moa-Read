@@ -18,7 +18,7 @@ public class ItemService {
     @Transactional
     public void createItem(CreateItemReqDto itemReqDto) {
         Item item = new Item();
-        item.setBookId(itemReqDto.getBook_isbn());
+        item.setBookIsbn(itemReqDto.getBookIsbn());
         item.setState(itemReqDto.getState());
         item.setPrice(itemReqDto.getPrice());
         item.setStock(itemReqDto.getStock());

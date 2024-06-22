@@ -3,7 +3,6 @@ package dongduk.cs.moaread.dao.mybatis;
 import dongduk.cs.moaread.dao.ItemDao;
 import dongduk.cs.moaread.dao.mybatis.mapper.ItemMapper;
 import dongduk.cs.moaread.domain.Item;
-import dongduk.cs.moaread.domain.item.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;

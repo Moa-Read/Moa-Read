@@ -97,6 +97,18 @@ public class ApplicationController {
         return "redirect:/application/admin/list";
     }
 
+    @GetMapping("/review/form/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String showReviewForm(@PathVariable int id, Model model, Principal principal) {
+        if (!principal.getName().equals("admin")) {
+            return "error/unauthorized";
+        }
+
+        Application application = applicationService.getApplicationById(id);
+        model.addAttribute("application", application);
+        return "application_review_form";
+    }
+
     /* 관리자 기능 - 중고 도서 판매 신청 내역 전체 조회 */
     @GetMapping("/admin/list")
     @PreAuthorize("isAuthenticated()")
