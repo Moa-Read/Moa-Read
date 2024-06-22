@@ -1,7 +1,9 @@
 package dongduk.cs.moaread.service;
 
 import dongduk.cs.moaread.dao.AccountDao;
+import dongduk.cs.moaread.dao.BlogDao;
 import dongduk.cs.moaread.domain.Account;
+import dongduk.cs.moaread.domain.Blog;
 import dongduk.cs.moaread.domain.enums.Role;
 import dongduk.cs.moaread.domain.enums.Status;
 import dongduk.cs.moaread.dto.account.request.SignupReqDto;
@@ -26,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
     private final AccountDao accountDao;
+    private final BlogDao blogDao;
     private final PasswordEncoder passwordEncoder;
 
     /* 회원 가입 */
@@ -51,14 +54,21 @@ public class AccountService implements UserDetailsService {
         newAccount.setUpdatedAt(LocalDateTime.now());
         newAccount.setBlogUrl("/blog/" + signupReqDto.getId());
 
+        // new blog 생성
+        Blog newBlog = new Blog();
+        newBlog.setUrl("/blog/" + signupReqDto.getId());
+        newBlog.setName(signupReqDto.getId() + "님의 블로그");
+        newBlog.setDescription("저의 블로그에 오신 것을 환영합니다!");
+        newBlog.setUserId(signupReqDto.getId());
+
+        blogDao.insertBlog(newBlog);
+
         return accountDao.insertAccount(newAccount);
     }
 
     /* 아이디 중복 검사 */
     public boolean isDuplicate(String id) {
         Account account = accountDao.findAccountById(id);
-
-        System.out.println(account.getId());
 
         if (account != null) {
             return true;
