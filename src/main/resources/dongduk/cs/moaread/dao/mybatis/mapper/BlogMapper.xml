@@ -31,4 +31,11 @@
         FROM BLOG
         WHERE USER_ID = #{userId}
     </select>
+
+    <update id="updateBlog" parameterType="Blog">
+        UPDATE BLOG SET
+        NAME = #{name},
+        DESCRIPTION = #{description}
+        WHERE URL = #{url}
+    </update>
 </mapper>

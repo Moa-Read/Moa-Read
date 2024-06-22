@@ -13,4 +13,6 @@ public interface BlogDao {
     int getAllBlogCount() throws DataAccessException;
 
     Blog getBlogByUserId(String userId) throws DataAccessException;
+
+    int updateBlog(Blog blog) throws DataAccessException;
 }

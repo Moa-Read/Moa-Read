@@ -2,6 +2,7 @@ package dongduk.cs.moaread.service;
 
 import dongduk.cs.moaread.dao.BlogDao;
 import dongduk.cs.moaread.domain.Blog;
+import dongduk.cs.moaread.dto.blog.request.BlogUpdateReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,15 @@ public class BlogService {
     /* 블로그 상세 조회 */
     public Blog getBlog(String userId) {
         return blogDao.getBlogByUserId(userId);
+    }
+
+    /* 블로그 수정 */
+    public int updateBlog(String url, BlogUpdateReqDto blogUpdateReqDto) {
+        Blog blog = new Blog();
+        blog.setUrl(url);
+        blog.setName(blogUpdateReqDto.getName());
+        blog.setDescription(blogUpdateReqDto.getDescription());
+
+        return blogDao.updateBlog(blog);
     }
 }

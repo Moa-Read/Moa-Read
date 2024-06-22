@@ -29,4 +29,8 @@ public class MybatisBlogDao implements BlogDao {
     public Blog getBlogByUserId(String id) throws DataAccessException {
         return blogMapper.getBlogByUserId(id);
     }
+
+    public int updateBlog(Blog blog) throws DataAccessException {
+        return blogMapper.updateBlog(blog);
+    }
 }

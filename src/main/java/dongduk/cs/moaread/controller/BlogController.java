@@ -1,15 +1,17 @@
 package dongduk.cs.moaread.controller;
 
 import dongduk.cs.moaread.domain.Blog;
+import dongduk.cs.moaread.dto.blog.request.BlogUpdateReqDto;
 import dongduk.cs.moaread.service.BlogService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -43,5 +45,32 @@ public class BlogController {
         model.addAttribute("blog", blog);
 
         return "blog";
+    }
+
+    /* 블로그 수정 Form */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/update")
+    public String updateBlog(Model model, Principal principal) {
+        Blog blog = blogService.getBlog(principal.getName());
+
+        model.addAttribute("updateBlogDto", blog);
+
+        return "update_blog_form";
+    }
+
+    /* 블로그 수정 */
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update")
+    public String updateBlog(@Valid @ModelAttribute("updateBlogDto")BlogUpdateReqDto blogUpdateReqDto,
+                             BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "update_blog_form";
+        }
+
+        String url = "/blog/" + principal.getName();
+
+        blogService.updateBlog(url, blogUpdateReqDto);
+
+        return "redirect:" + url;
     }
 }
