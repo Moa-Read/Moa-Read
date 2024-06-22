@@ -14,6 +14,8 @@
             <th>ID</th>
             <th>사용자 ID</th>
             <th>총 수량</th>
+            <th>은행 이름</th>
+            <th>계좌 번호</th>
             <th>신청 날짜</th>
             <th>상태</th>
             <th>상세 보기</th>
@@ -24,6 +26,8 @@
             <td th:text="${application.id}"></td>
             <td th:text="${application.userId}"></td>
             <td th:text="${application.totalQuantity}"></td>
+            <td th:text="${application.accountBank}"></td>
+            <td th:text="${application.accountNumber}"></td>
             <td th:text="${application.createdAt}"></td>
             <td th:text="${application.status}"></td>
             <td><a th:href="@{/application/detail/{id}(id=${application.id})}" class="btn btn-info">상세 보기</a></td>
