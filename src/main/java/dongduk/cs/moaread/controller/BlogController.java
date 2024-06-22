@@ -39,10 +39,22 @@ public class BlogController {
 
     /* 블로그 상세 조회 */
     @GetMapping("/{userId}")
-    public String getBlog(@PathVariable String userId, Model model) {
+    public String getBlog(@PathVariable String userId, Model model, Principal principal) {
         Blog blog = blogService.getBlog(userId);
 
+        boolean isLoggedIn = (principal != null);
+        boolean isOwner = false;
+        boolean isSubscribed = false;
+
+        if (isLoggedIn) {
+            isOwner = blog.getUserId().equals(principal.getName());
+            isSubscribed = blogService.isSubscribed(principal.getName(), blog.getUrl());
+        }
+
         model.addAttribute("blog", blog);
+        model.addAttribute("isLoggedIn", isLoggedIn);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("isSubscribed", isSubscribed);
 
         return "blog";
     }
@@ -72,5 +84,29 @@ public class BlogController {
         blogService.updateBlog(url, blogUpdateReqDto);
 
         return "redirect:" + url;
+    }
+
+    /* 블로그 구독 */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/subscribe/{blogId}")
+    public String subscribe(@PathVariable String blogId, Principal principal) {
+        String userId = principal.getName();
+        String blogUrl = "/blog/" + blogId;
+
+        blogService.subscribe(userId, blogUrl);
+
+        return "redirect:" + blogUrl;
+    }
+
+    /* 블로그 구독 취소 */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/unsubscribe/{blogId}")
+    public String unsubscribe(@PathVariable String blogId, Principal principal) {
+        String userId = principal.getName();
+        String blogUrl = "/blog/" + blogId;
+
+        blogService.unsubscribe(userId, blogUrl);
+
+        return "redirect:" + blogUrl;
     }
 }
