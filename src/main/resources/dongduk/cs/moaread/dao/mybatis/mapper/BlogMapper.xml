@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.BlogMapper">
+    <insert id="insertBlog" parameterType="Blog">
+        INSERT INTO BLOG
+            (URL, NAME, DESCRIPTION, USER_ID)
+        VALUES
+            (#{url}, #{name}, #{description}, #{userId})
+    </insert>
+
+    <select id="getAllBlogList" resultType="Blog">
+        SELECT *
+        FROM (
+            SELECT ROWNUM RN, B.URL, B.NAME, B.DESCRIPTION, B.USER_ID
+            FROM BLOG B, ACCOUNT A
+            WHERE B.USER_ID = A.ID AND A.STATUS = 'ACTIVE'
+            ORDER BY A.CREATED_AT DESC
+        )
+        WHERE RN BETWEEN (#{pageNum} - 1) * #{pageSize} + 1 AND #{pageNum} * #{pageSize}
+    </select>
+
+    <select id="getAllBlogCount" resultType="int">
+        SELECT COUNT(USER_ID)
+        FROM BLOG, ACCOUNT
+        WHERE ACCOUNT.STATUS = 'ACTIVE'
+    </select>
+</mapper>
