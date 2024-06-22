@@ -14,7 +14,9 @@
                     <h5 class="card-title" th:text="${blog.getName()}"></h5>
                     <p class="cart-text" th:text="${blog.getDescription()}"></p>
                     <div class="row p-1">
-                        <a th:href="${blog.getUrl()} + '/subscribe'" class="btn btn-primary">구독</a>
+                        <a th:if="${!isLoggedIn || !isOwner && !isSubscribed}" th:href="'subscribe/' + ${blog.getUserId()}" class="btn btn-primary">구독</a>
+                        <a th:if="${isLoggedIn && !isOwner && isSubscribed}" th:href="'unsubscribe/' + ${blog.getUserId()}" class="btn btn-primary">구독 취소</a>
+                        <a th:if="${isLoggedIn && isOwner && !isSubscribed}" th:href="@{/post/create}" class="btn btn-primary">서평 쓰기</a>
                     </div>
                 </div>
             </div>

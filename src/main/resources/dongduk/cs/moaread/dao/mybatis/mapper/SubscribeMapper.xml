@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.SubscribeMapper">
+    <insert id="insertSubscribe" parameterType="Subscribe">
+        INSERT INTO SUBSCRIBE
+            (USER_ID, BLOG_URL, CREATED_AT)
+        VALUES
+            (#{userId}, #{blogUrl}, #{createdAt})
+    </insert>
+
+    <delete id="deleteSubscribe" parameterType="Subscribe">
+        DELETE FROM SUBSCRIBE
+        WHERE USER_ID = #{userId} AND BLOG_URL = #{blogUrl}
+    </delete>
+
+    <select id="getSubscribeByIdAndUrl" parameterType="Subscribe">
+        SELECT *
+        FROM SUBSCRIBE
+        WHERE USER_ID = #{userId} AND BLOG_URL = #{blogUrl}
+    </select>
+</mapper>
