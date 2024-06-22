@@ -1,47 +1,47 @@
 package dongduk.cs.moaread.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import dongduk.cs.moaread.domain.Book;
 import dongduk.cs.moaread.service.NaverBookSearchService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.logging.Logger;
+import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class BookSearchController {
 
-    private static final Logger LOGGER = Logger.getLogger(BookSearchController.class.getName());
-
-    @Autowired
-    private NaverBookSearchService naverBookSearchService;
+    private final NaverBookSearchService naverBookSearchService;
 
     @GetMapping("/search")
-    public String searchBooks(@RequestParam String query,
-                              @RequestParam(defaultValue = "10") int display,
-                              @RequestParam(defaultValue = "1") int start,
-                              @RequestParam(defaultValue = "sim") String sort,
-                              Model model) {
-        try {
-            String result = naverBookSearchService.searchBooks(query, display, start, sort);
+    public String searchBooks(@RequestParam String query, @RequestParam(defaultValue = "1") int page, Model model) {
+        int pageSize = 10;
+        List<Book> books = naverBookSearchService.searchBooks(query);
+        naverBookSearchService.saveBooks(books);
 
-            // 저장 메서드 호출
-            naverBookSearchService.saveBooks(result);
+        int totalBooks = books.size();
+        int totalPages = (int) Math.ceil((double) totalBooks / pageSize);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode items = objectMapper.readTree(result).path("items");
+        int fromIndex = (page - 1) * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalBooks);
 
-            model.addAttribute("items", items.isMissingNode() ? Collections.emptyList() : items);
-            LOGGER.info("Items added to model: " + items);
-        } catch (Exception e) {
-            LOGGER.severe("Exception during JSON parsing: " + e.getMessage());
-            model.addAttribute("items", Collections.emptyList());
-        }
+        List<Book> paginatedBooks = books.subList(fromIndex, toIndex);
 
+        model.addAttribute("books", paginatedBooks);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("query", query);
         return "search";
+    }
+
+    @GetMapping("/search/detail")
+    public String getBookDetail(@RequestParam String isbn, @RequestParam String query, Model model) {
+        Book book = naverBookSearchService.getBookDetail(isbn);
+        model.addAttribute("book", book);
+        model.addAttribute("query", query);
+        return "book_detail";
     }
 }

@@ -16,5 +16,5 @@ public class Book {
     private Date publishDate;
     private String description;
     private int price;
-    private byte[] image;
+    private String image;  // 이미지 URL을 저장
 }
