@@ -42,6 +42,7 @@
     </style>
 </head>
 <body>
+<<<<<<< Updated upstream
 <h1>Book Search Results</h1>
 <ul>
     <li th:if="${items == null || #lists.isEmpty(items)}">
@@ -62,5 +63,71 @@
         </div>
     </li>
 </ul>
+=======
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h1>모아:읽다</h1>
+        <div>
+            <form th:if="${#authentication.authenticated}" th:action="@{/user/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-secondary">로그아웃</button>
+            </form>
+            <a th:if="${!#authentication.authenticated}" th:href="@{/user/login}" class="btn btn-primary">로그인</a>
+        </div>
+    </div>
+    <nav>
+        <a href="/" class="me-3">마이페이지</a>
+        <a href="/blog">블로그</a>
+    </nav>
+    <div class="search-container">
+        <form th:action="@{/search}" method="get" class="input-group mb-3">
+            <input type="text" class="form-control" name="query" placeholder="검색어를 입력하세요" required>
+            <button class="btn btn-primary" type="submit">검색</button>
+        </form>
+        <div th:if="${query != null}">
+            <p><strong>검색어:</strong> <span th:text="${query}">검색어</span></p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+        <p th:if="${#authentication.authenticated}" th:text="'로그인 된 사용자: ' + ${#authentication.name}"></p>
+    </div>
+    <div th:if="${books != null}">
+        <ul class="list-unstyled">
+            <li th:each="book : ${books}">
+                <div class="book-item">
+                    <div class="book-image">
+                        <img th:src="${book.image}" alt="Book Image" class="img-fluid">
+                    </div>
+                    <div class="book-details">
+                        <h5 class="truncate">
+                            <a th:href="@{/search/detail(isbn=${book.isbn}, query=${query})}" th:text="${#strings.abbreviate(book.title, 50)}">책 제목</a>
+                        </h5>
+                        <p><strong>저자:</strong> <span th:text="${book.author}"></span></p>
+                        <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
+                        <p><strong>출간일:</strong> <span th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}"></span></p>
+                        <p class="description" th:text="${book.description}">책 소개 내용</p>
+                        <p><strong>가격:</strong> <span th:text="${book.price}"></span>원</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="pagination-container">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li th:classappend="${currentPage == 1} ? 'disabled' : ''" class="page-item">
+                    <a class="page-link" th:href="@{/search(query=${query}, page=${currentPage - 1})}">이전</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(1, totalPages)}" class="page-item" th:classappend="${i == currentPage} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/search(query=${query}, page=${i})}" th:text="${i}">1</a>
+                </li>
+                <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''" class="page-item">
+                    <a class="page-link" th:href="@{/search(query=${query}, page=${currentPage + 1})}">다음</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+>>>>>>> Stashed changes
 </body>
 </html>
