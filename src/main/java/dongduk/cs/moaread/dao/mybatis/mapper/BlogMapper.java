@@ -14,4 +14,6 @@ public interface BlogMapper {
     int getAllBlogCount();
 
     Blog getBlogByUserId(String userId);
+
+    int updateBlog(Blog blog);
 }
