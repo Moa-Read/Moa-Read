@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.PostMapper">
+
     <insert id="insertPost" parameterType="Post">
         INSERT INTO POST
             (TITLE, CONTENT, CATEGORY_ID, BOOK_ISBN, VIEWS, CREATED_AT, UPDATED_AT)
@@ -11,16 +12,16 @@
 
     <update id="updatePost" parameterType="Post">
         UPDATE POST SET
-        TITLE = #{title},
-        CONTENT = #{content},
-        CATEGORY_ID = #{categoryId},
-        UPDATED_AT = #{updatedAt}
+                        TITLE = #{title},
+                        CONTENT = #{content},
+                        CATEGORY_ID = #{categoryId},
+                        UPDATED_AT = #{updatedAt}
         WHERE ID = #{id}
     </update>
 
     <update id="updateViews">
         UPDATE POST SET
-        VIEWS = VIEWS + 1
+            VIEWS = VIEWS + 1
         WHERE ID = #{id}
     </update>
 
@@ -32,11 +33,11 @@
     <select id="getAllPostByCategoryId" resultType="Post">
         SELECT *
         FROM (
-            SELECT ROWNUM RN, *
-            FROM POST
-            WHERE CATEGORY_ID = #{categoryId}
-            ORDER BY #{sort} DESC
-        )
+                 SELECT ROWNUM RN, *
+                 FROM POST
+                 WHERE CATEGORY_ID = #{categoryId}
+                 ORDER BY #{sort} DESC
+             )
         WHERE RN BETWEEN (#{pageNum} - 1) * #{pageSize} + 1 AND #{pageNum} * #{pageSize}
     </select>
 
@@ -51,4 +52,12 @@
         FROM POST
         WHERE ID = #{id}
     </select>
+
+    <select id="findPostsByBookIsbn" resultType="Post">
+        SELECT *
+        FROM POST
+        WHERE BOOK_ISBN = #{isbn}
+        ORDER BY CREATED_AT DESC
+    </select>
+
 </mapper>

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +53,10 @@ public class PostService {
     /* 서평 상세 조회 */
     public Post getPost(Long id) {
         return postDao.getPostById(id);
+    }
+
+    /* ISBN으로 서평 목록 조회 */
+    public List<Post> getPostsByBookIsbn(String isbn) {
+        return postDao.findPostsByBookIsbn(isbn);
     }
 }

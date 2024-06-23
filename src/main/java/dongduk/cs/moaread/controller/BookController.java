@@ -1,8 +1,10 @@
 package dongduk.cs.moaread.controller;
 
 import dongduk.cs.moaread.domain.Book;
+import dongduk.cs.moaread.domain.Post;
 import dongduk.cs.moaread.service.LikesService;
 import dongduk.cs.moaread.service.BookService;
+import dongduk.cs.moaread.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +24,7 @@ public class BookController {
 
     private final BookService bookService;
     private final LikesService likesService;
+    private final PostService postService;
 
     @GetMapping("/search")
     public String searchBooks(@RequestParam String query,
@@ -53,10 +56,14 @@ public class BookController {
     }
 
     @GetMapping("/search/detail")
-    public String getBookDetail(@RequestParam String isbn, @RequestParam String query, Model model, Principal principal) {
+    public String getBookDetail(@RequestParam("isbn") String isbn,
+                                @RequestParam("query") String query,
+                                Model model,
+                                Principal principal) {
         Book book = bookService.getBookDetail(isbn);
         model.addAttribute("book", book);
         model.addAttribute("query", query);
+
         if (principal != null) {
             String userId = principal.getName();
             boolean liked = likesService.isBookLikedByUser(userId, isbn);
@@ -65,6 +72,10 @@ public class BookController {
         } else {
             model.addAttribute("liked", false);
         }
+
+        List<Post> posts = postService.getPostsByBookIsbn(isbn);
+        model.addAttribute("posts", posts);
+
         return "book_detail";
     }
 
