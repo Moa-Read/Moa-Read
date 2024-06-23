@@ -11,14 +11,25 @@
         <div class="col-3 bg-light p-1">
             <div class="card text-start bg-light">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${blog.getName()}"></h5>
-                    <p class="cart-text" th:text="${blog.getDescription()}"></p>
+                    <h5 class="card-title" th:text="${blogResDto.getBlog().getName()}"></h5>
+                    <p class="cart-text" th:text="${blogResDto.getBlog().getDescription()}"></p>
                     <div class="row p-1">
-                        <a th:if="${!isLoggedIn || !isOwner && !isSubscribed}" th:href="'subscribe/' + ${blog.getUserId()}" class="btn btn-primary">구독</a>
-                        <a th:if="${isLoggedIn && !isOwner && isSubscribed}" th:href="'unsubscribe/' + ${blog.getUserId()}" class="btn btn-primary">구독 취소</a>
+                        <a th:if="${!isLoggedIn || !isOwner && !isSubscribed}" th:href="'subscribe/' + ${blogResDto.getBlog().getUserId()}" class="btn btn-primary">구독</a>
+                        <a th:if="${isLoggedIn && !isOwner && isSubscribed}" th:href="'unsubscribe/' + ${blogResDto.getBlog().getUserId()}" class="btn btn-primary">구독 취소</a>
                         <a th:if="${isLoggedIn && isOwner && !isSubscribed}" th:href="@{/post/create}" class="btn btn-primary">서평 쓰기</a>
                     </div>
+                    <div th:if="${isLoggedIn && isOwner && !isSubscribed}" class="row p-1">
+                        <a th:href="@{/blog/update}" class="btn btn-primary">블로그 편집</a>
+                    </div>
+                    <div th:if="${isLoggedIn && isOwner && !isSubscribed}" class="row p-1">
+                        <a th:href="@{/category}" class="btn btn-primary">카테고리 편집</a>
+                    </div>
                 </div>
+            </div>
+            <div>
+                <nav class="nav flex-column">
+                    <a th:each="category : ${blogResDto.getCategoryList()}" th:href="@{'/category/' + ${category.getId()}}" th:text="${category.getName()}" class="nav-link"></a>
+                </nav>
             </div>
         </div>
         <div class="col-8">

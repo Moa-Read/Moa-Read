@@ -2,6 +2,7 @@ package dongduk.cs.moaread.controller;
 
 import dongduk.cs.moaread.domain.Blog;
 import dongduk.cs.moaread.dto.blog.request.BlogUpdateReqDto;
+import dongduk.cs.moaread.dto.blog.response.BlogResDto;
 import dongduk.cs.moaread.service.BlogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,18 +41,18 @@ public class BlogController {
     /* 블로그 상세 조회 */
     @GetMapping("/{userId}")
     public String getBlog(@PathVariable String userId, Model model, Principal principal) {
-        Blog blog = blogService.getBlog(userId);
+        BlogResDto blogResDto = blogService.getBlog(userId);
 
         boolean isLoggedIn = (principal != null);
         boolean isOwner = false;
         boolean isSubscribed = false;
 
         if (isLoggedIn) {
-            isOwner = blog.getUserId().equals(principal.getName());
-            isSubscribed = blogService.isSubscribed(principal.getName(), blog.getUrl());
+            isOwner = blogResDto.getBlog().getUserId().equals(principal.getName());
+            isSubscribed = blogService.isSubscribed(principal.getName(), blogResDto.getBlog().getUrl());
         }
 
-        model.addAttribute("blog", blog);
+        model.addAttribute("blogResDto", blogResDto);
         model.addAttribute("isLoggedIn", isLoggedIn);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isSubscribed", isSubscribed);
@@ -63,7 +64,7 @@ public class BlogController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/update")
     public String updateBlog(Model model, Principal principal) {
-        Blog blog = blogService.getBlog(principal.getName());
+        Blog blog = blogService.getBlogInfo(principal.getName());
 
         model.addAttribute("updateBlogDto", blog);
 
