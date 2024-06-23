@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class BookSearchController {
+public class BookController {
 
     private final NaverBookSearchService naverBookSearchService;
     private final LikesService likesService;

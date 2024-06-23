@@ -1,24 +1,33 @@
 package dongduk.cs.moaread.dao.mybatis;
 
 import dongduk.cs.moaread.dao.BookDao;
-import dongduk.cs.moaread.dao.mybatis.mapper.BookMapper;
 import dongduk.cs.moaread.domain.Book;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
+@RequiredArgsConstructor
 public class MybatisBookDao implements BookDao {
-    @Autowired
-    private BookMapper bookMapper;
+
+    private final SqlSession sqlSession;
+
+    private static final String NAMESPACE = "dongduk.cs.moaread.dao.mybatis.mapper.BookMapper";
 
     @Override
-    public int insertBook(Book book) throws DataAccessException {
-        return bookMapper.insertBook(book);
+    public int insertBook(Book book) {
+        return sqlSession.insert(NAMESPACE + ".insertBook", book);
     }
 
     @Override
-    public Book findByIsbn(String isbn) throws DataAccessException {
-        return bookMapper.findByIsbn(isbn);
+    public Book findByIsbn(String isbn) {
+        return sqlSession.selectOne(NAMESPACE + ".findByIsbn", isbn);
+    }
+
+    @Override
+    public List<Book> searchBooksByKeyword(String keyword) {
+        return sqlSession.selectList(NAMESPACE + ".searchBooksByKeyword", keyword);
     }
 }
