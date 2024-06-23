@@ -1,11 +1,18 @@
 package dongduk.cs.moaread.domain;
 
-import lombok.Data;
-import java.sql.Timestamp;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Likes {
     private String userId;
     private String bookIsbn;
-    private Timestamp createdAt;
+
+    public Likes() {}
+
+    public Likes(String userId, String bookIsbn) {
+        this.userId = userId;
+        this.bookIsbn = bookIsbn;
+    }
 }

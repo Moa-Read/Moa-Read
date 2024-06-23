@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>도서 상세 정보</title>
@@ -41,38 +42,16 @@
             margin-top: 20px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-        function likeBook(button) {
-            var bookIsbn = $(button).data("isbn");
-            var isLoggedIn = /*[[${#authentication.authenticated}]]*/ false;
-
-            if (!isLoggedIn) {
-                var currentUrl = window.location.href;
-                window.location.href = '/user/login?redirect=' + encodeURIComponent(currentUrl);
-                return;
-            }
-
-            $.post("/like", { bookIsbn: bookIsbn })
-                .done(function () {
-                    alert("Liked the book!");
-                    $(button).prop("disabled", true);
-                })
-                .fail(function () {
-                    alert("Failed to like the book.");
-                });
-        }
-    </script>
 </head>
 <body>
 <div class="container">
     <div class="d-flex justify-content-between align-items-center my-4">
         <h1>모아:읽다</h1>
         <div>
-            <form th:if="${#authentication.authenticated}" th:action="@{/user/logout}" method="post" style="display:inline;">
+            <form sec:authorize="isAuthenticated()" th:action="@{/user/logout}" method="post" style="display:inline;">
                 <button type="submit" class="btn btn-secondary">로그아웃</button>
             </form>
-            <a th:if="${!#authentication.authenticated}" th:href="@{/user/login}" class="btn btn-primary">로그인</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/user/login}" class="btn btn-primary">로그인</a>
         </div>
     </div>
     <nav>
@@ -80,7 +59,7 @@
         <a href="/blog">블로그</a>
     </nav>
     <div class="d-flex justify-content-end">
-        <p th:if="${#authentication.authenticated}" th:text="'로그인 된 사용자: ' + ${#authentication.name}"></p>
+        <p sec:authorize="isAuthenticated()" th:text="'로그인 된 사용자: ' + ${#authentication.name}"></p>
     </div>
     <div class="back-link-container">
         <a th:href="@{/search(query=${query})}" class="btn btn-secondary">목록으로</a>
@@ -97,7 +76,16 @@
                 <p><strong>출간일:</strong> <span th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}"></span></p>
                 <p class="book-description" th:text="${book.description}">책 소개 내용</p>
                 <p><strong>가격:</strong> <span th:text="${book.price}"></span>원</p>
-                <button id="likeButton" th:data-isbn="${book.isbn}" onclick="likeBook(this)" class="btn btn-outline-primary mt-3">좋아요</button>
+                <form th:if="${liked}" th:action="@{/unlike}" method="post">
+                    <input type="hidden" name="bookIsbn" th:value="${book.isbn}" />
+                    <input type="hidden" name="query" th:value="${query}" />
+                    <button type="submit" class="btn btn-outline-danger mt-3">좋아요 취소</button>
+                </form>
+                <form th:if="${!liked}" th:action="@{/like}" method="post">
+                    <input type="hidden" name="bookIsbn" th:value="${book.isbn}" />
+                    <input type="hidden" name="query" th:value="${query}" />
+                    <button type="submit" class="btn btn-outline-primary mt-3">좋아요</button>
+                </form>
             </div>
         </div>
     </div>

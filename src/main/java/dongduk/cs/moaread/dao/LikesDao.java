@@ -5,4 +5,6 @@ import org.springframework.dao.DataAccessException;
 
 public interface LikesDao {
     int insertLike(Likes likes) throws DataAccessException;
+    int deleteLike(Likes likes) throws DataAccessException;
+    int isLiked(Likes likes) throws DataAccessException;
 }
