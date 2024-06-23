@@ -35,12 +35,14 @@ public class BlogService {
     }
 
     /* 블로그 조회 */
-    public BlogResDto getBlog(String userId, Long categoryId,
-                              String sort, Integer pageNum, Integer pageSize) {
+    public BlogResDto getBlog(String userId) {
         Blog blog = blogDao.getBlogByUserId(userId);
         List<Category> categoryList = categoryDao.getAllCategoryByUrl(blog.getUrl());
-        List<Post> postList = postDao.getAllPostByCategoryId(categoryId, sort, pageNum, pageSize);
-        int totalSize = postDao.getAllPostCountByCategoryId(categoryId);
+        List<Post> postList = postDao.getAllPostByUrl(blog.getUrl());
+
+        System.out.println(userId);
+        System.out.println(blog.getUrl());
+        System.out.println(postList);
 
         BlogResDto blogResDto = new BlogResDto();
         blogResDto.setBlog(blog);

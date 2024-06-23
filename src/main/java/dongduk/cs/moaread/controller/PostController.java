@@ -26,7 +26,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final CategoryService categoryService;
-    private final BookService bookSearchService;
+    private final BookService bookService;
 
     /* 서평 등록 Form */
     @PreAuthorize("isAuthenticated()")
@@ -59,7 +59,7 @@ public class PostController {
             return "create_post_form";
         }
 
-        String blogUrl = "/blog/" + principal.getName() + "/1";
+        String blogUrl = "/blog/" + principal.getName();
 
         postService.createPost(postReqDto);
 

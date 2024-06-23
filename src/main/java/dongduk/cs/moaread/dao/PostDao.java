@@ -14,6 +14,8 @@ public interface PostDao {
 
     int deletePost(Long id) throws DataAccessException;
 
+    List<Post> getAllPostByUrl(String url) throws DataAccessException;
+
     List<Post> getAllPostByCategoryId(Long categoryId, String sort, Integer pageNum, Integer pageSize) throws DataAccessException;
 
     int getAllPostCountByCategoryId(Long categoryId) throws DataAccessException;

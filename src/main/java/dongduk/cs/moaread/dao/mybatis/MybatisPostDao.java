@@ -30,6 +30,10 @@ public class MybatisPostDao implements PostDao {
         return postMapper.deletePost(id);
     }
 
+    public List<Post> getAllPostByUrl(String url) throws DataAccessException {
+        return postMapper.getAllPostByUrl(url);
+    }
+
     public List<Post> getAllPostByCategoryId(Long categoryId, String sort, Integer pageNum, Integer pageSize) throws DataAccessException {
         return postMapper.getAllPostByCategoryId(categoryId, sort, pageNum, pageSize);
     }

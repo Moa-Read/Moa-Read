@@ -29,6 +29,12 @@
         WHERE ID = #{id}
     </delete>
 
+    <select id="getAllPostByUrl" resultType="Post">
+        SELECT *
+        FROM POST
+        WHERE BLOG_URL = #{url}
+    </select>
+
     <select id="getAllPostByCategoryId" resultType="Post">
         SELECT *
         FROM (

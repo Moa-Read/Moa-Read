@@ -15,6 +15,8 @@ public interface PostMapper {
 
     int deletePost(Long id);
 
+    List<Post> getAllPostByUrl(String url);
+
     List<Post> getAllPostByCategoryId(Long categoryId, String sort, Integer pageNum, Integer pageSize);
 
     int getAllPostCountByCategoryId(Long categoryId);
