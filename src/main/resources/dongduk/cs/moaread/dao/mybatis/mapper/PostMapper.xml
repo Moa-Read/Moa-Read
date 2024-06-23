@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.PostMapper">
+    <insert id="insertPost" parameterType="Post">
+        INSERT INTO POST
+            (TITLE, CONTENT, CATEGORY_ID, BOOK_ISBN, VIEWS, CREATED_AT, UPDATED_AT)
+        VALUES
+            (#{title}, #{content}, #{categoryId}, #{bookIsbn}, #{view}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updatePost" parameterType="Post">
+        UPDATE POST SET
+        TITLE = #{title},
+        CONTENT = #{content},
+        CATEGORY_ID = #{categoryId},
+        UPDATED_AT = #{updatedAt}
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updateViews">
+        UPDATE POST SET
+        VIEWS = VIEWS + 1
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deletePost">
+        DELETE FROM POST
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="getAllPostByCategoryId" resultType="Post">
+        SELECT *
+        FROM (
+            SELECT ROWNUM RN, *
+            FROM POST
+            WHERE CATEGORY_ID = #{categoryId}
+            ORDER BY #{sort} DESC
+        )
+        WHERE RN BETWEEN (#{pageNum} - 1) * #{pageSize} + 1 AND #{pageNum} * #{pageSize}
+    </select>
+
+    <select id="getAllPostCountByCategoryId" resultType="int">
+        SELECT COUNT(ID)
+        FROM POST
+        WHERE CATEGORY_ID = #{categoryId}
+    </select>
+
+    <select id="getPostById" resultType="Post">
+        SELECT *
+        FROM POST
+        WHERE ID = #{id}
+    </select>
+</mapper>

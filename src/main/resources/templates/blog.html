@@ -33,7 +33,34 @@
             </div>
         </div>
         <div class="col-8">
-            포스트
+            <div th:if="${blogResDto.getPostList() == null || #lists.isEmpty(blogResDto.getPostList())}">아직 작성된 서평이 없습니다.</div>
+            <div th:if="${blogResDto.getPostList() != null && !#lists.isEmpty(blogResDto.getPostList())}" th:each="post : ${blogResDto.getPostList()}" class="list-group p-1">
+                <a th:href="'/post/detail/' + ${post.getId()}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 th:text="${post.getTitle()}" class="mb-1"></h5>
+                    </div>
+                    <p th:text="${post.getCategoryId()}" class="mb-1"></p>
+                </a>
+            </div>
+            <div class="p-5">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li th:classappend="${pageNum == 1} ? 'disabled' : ''" class="page-item">
+                            <a class="page-link" th:href="@{/blog/${blogResDto.getBlog().getUserId()}/${categoryId}(pageNum=${pageNum - 1}, pageSize=${pageSize})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="page : ${#numbers.sequence(1, totalPage)}" th:classappend="${pageNum == page} ? 'active' : ''">
+                            <a class="page-link" th:href="@{/blog/${blogResDto.getBlog().getUserId()}/${categoryId}(pageNum=${page}, pageSize=${pageSize})}" th:text="${page}"></a>
+                        </li>
+                        <li th:classappend="${pageNum == totalPage} ? 'disabled' : ''" class="page-item">
+                            <a class="page-link" th:href="@{/blog/${blogResDto.getBlog().getUserId()}/${categoryId}(pageNum=${pageNum + 1}, pageSize=${pageSize})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 </div>
