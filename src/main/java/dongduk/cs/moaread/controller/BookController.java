@@ -2,7 +2,7 @@ package dongduk.cs.moaread.controller;
 
 import dongduk.cs.moaread.domain.Book;
 import dongduk.cs.moaread.service.LikesService;
-import dongduk.cs.moaread.service.NaverBookSearchService;
+import dongduk.cs.moaread.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookController {
 
-    private final NaverBookSearchService naverBookSearchService;
+    private final BookService bookService;
     private final LikesService likesService;
 
     @GetMapping("/search")
@@ -28,8 +28,8 @@ public class BookController {
                               Model model,
                               Principal principal) {
         int pageSize = 10;
-        List<Book> books = naverBookSearchService.searchBooks(query, sort);
-        naverBookSearchService.saveBooks(books);
+        List<Book> books = bookService.searchBooks(query, sort);
+        bookService.saveBooks(books);
 
         int totalBooks = books.size();
         int totalPages = (int) Math.ceil((double) totalBooks / pageSize);
@@ -52,7 +52,7 @@ public class BookController {
 
     @GetMapping("/search/detail")
     public String getBookDetail(@RequestParam String isbn, @RequestParam String query, Model model, Principal principal) {
-        Book book = naverBookSearchService.getBookDetail(isbn);
+        Book book = bookService.getBookDetail(isbn);
         model.addAttribute("book", book);
         model.addAttribute("query", query);
         if (principal != null) {
@@ -86,5 +86,12 @@ public class BookController {
         String userId = principal.getName();  // 인증된 사용자 이름 가져오기
         likesService.unlikeBook(userId, bookIsbn);
         return "redirect:/search/detail?isbn=" + bookIsbn + "&query=" + query;
+    }
+
+    @GetMapping("/")
+    public String bookRecommend(Model model) {
+        List<Book> topLikedBooks = bookService.getTopLikedBooks(5);
+        model.addAttribute("todayBooks", topLikedBooks);
+        return "main";
     }
 }

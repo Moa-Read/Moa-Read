@@ -91,7 +91,7 @@
                         <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
                         <p><strong>출간일:</strong> <span th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}"></span></p>
                         <p class="description" th:text="${book.description}">책 소개 내용</p>
-                        <p><strong>가격:</strong> <span th:text="${book.price}"></span>원</p>
+                        <p><strong>정가:</strong> <span th:text="${book.price}"></span>원</p>
                     </div>
                 </div>
             </li>
