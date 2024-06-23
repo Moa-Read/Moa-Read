@@ -62,7 +62,7 @@
         <p sec:authorize="isAuthenticated()" th:text="'로그인 된 사용자: ' + ${#authentication.name}"></p>
     </div>
     <div class="back-link-container">
-        <a th:href="@{/search(query=${query})}" class="btn btn-secondary">목록으로</a>
+        <a th:if="${query != null && !#strings.isEmpty(query)}" th:href="@{/search(query=${query})}" class="btn btn-secondary">목록으로</a>
     </div>
     <div class="book-container">
         <div class="book-item">
@@ -75,7 +75,7 @@
                 <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
                 <p><strong>출간일:</strong> <span th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}"></span></p>
                 <p class="book-description" th:text="${book.description}">책 소개 내용</p>
-                <p><strong>가격:</strong> <span th:text="${book.price}"></span>원</p>
+                <p><strong>정가:</strong> <span th:text="${book.price}"></span>원</p>
                 <form th:if="${liked}" th:action="@{/unlike}" method="post">
                     <input type="hidden" name="bookIsbn" th:value="${book.isbn}" />
                     <input type="hidden" name="query" th:value="${query}" />

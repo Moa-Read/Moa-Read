@@ -10,5 +10,7 @@ public interface BookDao {
 
     Book findByIsbn(String isbn) throws DataAccessException;
 
-    List<Book> searchBooksByKeyword(String keyword) throws DataAccessException;  // 키워드 검색 메서드 추가
+    List<Book> searchBooksByKeyword(String keyword) throws DataAccessException;
+
+    List<Book> findTopLikedBooks(int limit) throws DataAccessException;
 }

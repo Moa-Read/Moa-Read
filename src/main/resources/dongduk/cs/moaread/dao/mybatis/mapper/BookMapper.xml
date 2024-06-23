@@ -22,4 +22,13 @@
            OR DESCRIPTION LIKE CONCAT('%', #{keyword}, '%')
     </select>
 
+    <select id="findTopLikedBooks" resultType="dongduk.cs.moaread.domain.Book">
+        SELECT b.*, COUNT(l.BOOK_ISBN) AS like_count
+        FROM BOOK b
+                 LEFT JOIN LIKES l ON b.ISBN = l.BOOK_ISBN
+        GROUP BY b.ISBN, b.TITLE, b.AUTHOR, b.PUBLISHER, b.PUBLISH_DATE, b.DESCRIPTION, b.PRICE, b.IMAGE
+        ORDER BY like_count DESC
+            FETCH FIRST #{limit} ROWS ONLY
+    </select>
+
 </mapper>

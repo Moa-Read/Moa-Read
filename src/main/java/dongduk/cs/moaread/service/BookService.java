@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NaverBookSearchService {
+public class BookService {
 
     @Value("${naver.client.id}")
     private String clientId;
@@ -111,5 +111,10 @@ public class NaverBookSearchService {
             return value.substring(0, length);
         }
         return value;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Book> getTopLikedBooks(int limit) {
+        return bookDao.findTopLikedBooks(limit);
     }
 }

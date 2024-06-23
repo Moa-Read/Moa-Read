@@ -4,6 +4,7 @@ import dongduk.cs.moaread.dao.BookDao;
 import dongduk.cs.moaread.domain.Book;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,5 +30,10 @@ public class MybatisBookDao implements BookDao {
     @Override
     public List<Book> searchBooksByKeyword(String keyword) {
         return sqlSession.selectList(NAMESPACE + ".searchBooksByKeyword", keyword);
+    }
+
+    @Override
+    public List<Book> findTopLikedBooks(int limit) {
+        return sqlSession.selectList(NAMESPACE + ".findTopLikedBooks", limit);
     }
 }
