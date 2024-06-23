@@ -14,5 +14,4 @@ public class BlogResDto {
     private Blog blog;
     private List<Category> categoryList;
     private List<Post> postList;
-    private int totalSize;
 }

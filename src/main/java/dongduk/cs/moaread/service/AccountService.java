@@ -66,7 +66,7 @@ public class AccountService implements UserDetailsService {
 
         // new category 생성
         Category newCategory = new Category();
-        newCategory.setName("전체 서평");
+        newCategory.setName("기본 카테고리");
         newCategory.setBlogUrl("/blog/" + signupReqDto.getId());
 
         blogDao.insertBlog(newBlog);
