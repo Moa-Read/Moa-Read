@@ -11,21 +11,31 @@ import java.util.List;
 
 @Repository
 public class MybatisPostDao implements PostDao {
+
     @Autowired
     private PostMapper postMapper;
 
+    @Override
+    public List<Post> findPostsByBookIsbn(String isbn) throws DataAccessException {
+        return postMapper.findPostsByBookIsbn(isbn);
+    }
+
+    @Override
     public int insertPost(Post post) throws DataAccessException {
         return postMapper.insertPost(post);
     }
 
+    @Override
     public int updatePost(Post post) throws DataAccessException {
         return postMapper.updatePost(post);
     }
 
+    @Override
     public int updateViews(Long id) throws DataAccessException {
         return postMapper.updateViews(id);
     }
 
+    @Override
     public int deletePost(Long id) throws DataAccessException {
         return postMapper.deletePost(id);
     }
@@ -38,10 +48,12 @@ public class MybatisPostDao implements PostDao {
         return postMapper.getAllPostByCategoryId(categoryId, sort, pageNum, pageSize);
     }
 
+    @Override
     public int getAllPostCountByCategoryId(Long categoryId) throws DataAccessException {
         return postMapper.getAllPostCountByCategoryId(categoryId);
     }
 
+    @Override
     public Post getPostById(Long id) throws DataAccessException {
         return postMapper.getPostById(id);
     }

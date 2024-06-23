@@ -22,4 +22,6 @@ public interface PostMapper {
     int getAllPostCountByCategoryId(Long categoryId);
 
     Post getPostById(Long id);
+
+    List<Post> findPostsByBookIsbn(String isbn);
 }
