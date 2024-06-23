@@ -96,7 +96,7 @@ public class PostController {
     /* 서평 수정 */
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/update/{id}")
-    public String updatePost(@RequestParam Long id, @Valid @ModelAttribute("postDto") PostReqDto postReqDto,
+    public String updatePost(@PathVariable Long id, @Valid @ModelAttribute("postDto") PostReqDto postReqDto,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "update_post_form";
@@ -120,7 +120,7 @@ public class PostController {
 
         postService.deletePost(id);
 
-        return "redirect:/post/detail/" + id;
+        return "redirect:/";
     }
 
     /* 서평 상세 조회 */
