@@ -4,6 +4,7 @@ import dongduk.cs.moaread.domain.Blog;
 import dongduk.cs.moaread.dto.blog.request.BlogUpdateReqDto;
 import dongduk.cs.moaread.dto.blog.response.BlogResDto;
 import dongduk.cs.moaread.service.BlogService;
+import dongduk.cs.moaread.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,9 +40,15 @@ public class BlogController {
     }
 
     /* 블로그 상세 조회 */
-    @GetMapping("/{userId}")
-    public String getBlog(@PathVariable String userId, Model model, Principal principal) {
-        BlogResDto blogResDto = blogService.getBlog(userId);
+    @GetMapping("/{userId}/{categoryId}")
+    public String getBlog(@PathVariable String userId, @PathVariable Long categoryId,
+                          @RequestParam(value = "sort", defaultValue = "CREATED_AT") String sort,
+                          @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                          Model model, Principal principal) {
+        BlogResDto blogResDto = blogService.getBlog(userId, categoryId, sort, pageNum, pageSize);
+        int totalSize = blogResDto.getTotalSize();
+        int totalPage = (totalSize % 10 > 0 ? ((totalSize / 10) + 1) : totalSize);
 
         boolean isLoggedIn = (principal != null);
         boolean isOwner = false;
@@ -53,9 +60,13 @@ public class BlogController {
         }
 
         model.addAttribute("blogResDto", blogResDto);
+        model.addAttribute(("categoryId"), categoryId);
         model.addAttribute("isLoggedIn", isLoggedIn);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("isSubscribed", isSubscribed);
+        model.addAttribute("pageNum", pageNum);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPage", totalPage);
 
         return "blog";
     }

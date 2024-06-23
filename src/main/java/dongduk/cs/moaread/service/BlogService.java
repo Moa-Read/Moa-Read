@@ -2,9 +2,11 @@ package dongduk.cs.moaread.service;
 
 import dongduk.cs.moaread.dao.BlogDao;
 import dongduk.cs.moaread.dao.CategoryDao;
+import dongduk.cs.moaread.dao.PostDao;
 import dongduk.cs.moaread.dao.SubscribeDao;
 import dongduk.cs.moaread.domain.Blog;
 import dongduk.cs.moaread.domain.Category;
+import dongduk.cs.moaread.domain.Post;
 import dongduk.cs.moaread.domain.Subscribe;
 import dongduk.cs.moaread.dto.blog.request.BlogUpdateReqDto;
 import dongduk.cs.moaread.dto.blog.response.BlogResDto;
@@ -19,6 +21,7 @@ import java.util.List;
 public class BlogService {
     private final BlogDao blogDao;
     private final CategoryDao categoryDao;
+    private final PostDao postDao;
     private final SubscribeDao subscribeDao;
 
     /* 블로그 전체 조회 */
@@ -32,13 +35,17 @@ public class BlogService {
     }
 
     /* 블로그 조회 */
-    public BlogResDto getBlog(String userId) {
+    public BlogResDto getBlog(String userId, Long categoryId,
+                              String sort, Integer pageNum, Integer pageSize) {
         Blog blog = blogDao.getBlogByUserId(userId);
         List<Category> categoryList = categoryDao.getAllCategoryByUrl(blog.getUrl());
+        List<Post> postList = postDao.getAllPostByCategoryId(categoryId, sort, pageNum, pageSize);
+        int totalSize = postDao.getAllPostCountByCategoryId(categoryId);
 
         BlogResDto blogResDto = new BlogResDto();
         blogResDto.setBlog(blog);
         blogResDto.setCategoryList(categoryList);
+        blogResDto.setPostList(postList);
 
         return blogResDto;
     }
