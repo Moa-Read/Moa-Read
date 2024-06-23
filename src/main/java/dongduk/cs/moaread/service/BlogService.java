@@ -1,10 +1,13 @@
 package dongduk.cs.moaread.service;
 
 import dongduk.cs.moaread.dao.BlogDao;
+import dongduk.cs.moaread.dao.CategoryDao;
 import dongduk.cs.moaread.dao.SubscribeDao;
 import dongduk.cs.moaread.domain.Blog;
+import dongduk.cs.moaread.domain.Category;
 import dongduk.cs.moaread.domain.Subscribe;
 import dongduk.cs.moaread.dto.blog.request.BlogUpdateReqDto;
+import dongduk.cs.moaread.dto.blog.response.BlogResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BlogService {
     private final BlogDao blogDao;
+    private final CategoryDao categoryDao;
     private final SubscribeDao subscribeDao;
 
     /* 블로그 전체 조회 */
@@ -27,8 +31,20 @@ public class BlogService {
         return blogDao.getAllBlogCount();
     }
 
+    /* 블로그 조회 */
+    public BlogResDto getBlog(String userId) {
+        Blog blog = blogDao.getBlogByUserId(userId);
+        List<Category> categoryList = categoryDao.getAllCategoryByUrl(blog.getUrl());
+
+        BlogResDto blogResDto = new BlogResDto();
+        blogResDto.setBlog(blog);
+        blogResDto.setCategoryList(categoryList);
+
+        return blogResDto;
+    }
+
     /* 블로그 상세 조회 */
-    public Blog getBlog(String userId) {
+    public Blog getBlogInfo(String userId) {
         return blogDao.getBlogByUserId(userId);
     }
 

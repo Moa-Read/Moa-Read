@@ -2,8 +2,10 @@ package dongduk.cs.moaread.service;
 
 import dongduk.cs.moaread.dao.AccountDao;
 import dongduk.cs.moaread.dao.BlogDao;
+import dongduk.cs.moaread.dao.CategoryDao;
 import dongduk.cs.moaread.domain.Account;
 import dongduk.cs.moaread.domain.Blog;
+import dongduk.cs.moaread.domain.Category;
 import dongduk.cs.moaread.domain.enums.Role;
 import dongduk.cs.moaread.domain.enums.Status;
 import dongduk.cs.moaread.dto.account.request.SignupReqDto;
@@ -29,6 +31,7 @@ import java.util.List;
 public class AccountService implements UserDetailsService {
     private final AccountDao accountDao;
     private final BlogDao blogDao;
+    private final CategoryDao categoryDao;
     private final PasswordEncoder passwordEncoder;
 
     /* 회원 가입 */
@@ -61,7 +64,13 @@ public class AccountService implements UserDetailsService {
         newBlog.setDescription("저의 블로그에 오신 것을 환영합니다!");
         newBlog.setUserId(signupReqDto.getId());
 
+        // new category 생성
+        Category newCategory = new Category();
+        newCategory.setName("전체 서평");
+        newCategory.setBlogUrl("/blog/" + signupReqDto.getId());
+
         blogDao.insertBlog(newBlog);
+        categoryDao.insertCategory(newCategory);
 
         return accountDao.insertAccount(newAccount);
     }

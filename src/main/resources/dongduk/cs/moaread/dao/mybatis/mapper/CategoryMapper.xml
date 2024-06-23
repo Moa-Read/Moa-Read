@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.CategoryMapper">
+    <insert id="insertCategory" parameterType="Category">
+        INSERT INTO CATEGORY
+            (NAME, BLOG_URL)
+        VALUES
+            (#{name}, #{blogUrl})
+    </insert>
+
+    <update id="updateCategory" parameterType="Category">
+        UPDATE CATEGORY SET
+        NAME = #{name}
+        WHERE ID = #{id}
+    </update>
+
+    <delete id="deleteCategory">
+        DELETE FROM CATEGORY
+        WHERE ID = #{id}
+    </delete>
+
+    <select id="findCategoryByNameAndUrl" parameterType="Category" resultType="Category">
+        SELECT *
+        FROM CATEGORY
+        WHERE NAME = #{name} AND BLOG_URL = #{blogUrl}
+    </select>
+
+    <select id="findCategoryById" resultType="Category">
+        SELECT *
+        FROM CATEGORY
+        WHERE ID = #{id}
+    </select>
+
+    <select id="getAllCategoryByUrl" resultType="Category">
+        SELECT *
+        FROM CATEGORY
+        WHERE BLOG_URL = #{blogUrl}
+    </select>
+</mapper>

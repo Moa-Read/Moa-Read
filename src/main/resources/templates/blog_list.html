@@ -8,7 +8,7 @@
 <body>
 <div class="container w-50 p-5">
     <div th:if="${blogList == null || #lists.isEmpty(blogList)}">블로그가 존재하지 않습니다.</div>
-    <div th:if="${blogList != null && !#lists.isEmpty(blogList)}" th:each="blog : ${blogList}" class="list-group">
+    <div th:if="${blogList != null && !#lists.isEmpty(blogList)}" th:each="blog : ${blogList}" class="list-group p-1">
         <a th:href="${blog.getUrl()}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
                 <h5 th:text="${blog.getName()}" class="mb-1"></h5>
