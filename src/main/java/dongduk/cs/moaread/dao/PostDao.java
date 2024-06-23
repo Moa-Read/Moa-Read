@@ -19,4 +19,6 @@ public interface PostDao {
     int getAllPostCountByCategoryId(Long categoryId) throws DataAccessException;
 
     Post getPostById(Long id) throws DataAccessException;
+
+    List<Post> findPostsByBookIsbn(String isbn) throws DataAccessException;
 }

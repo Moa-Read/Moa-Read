@@ -41,6 +41,28 @@
         .back-link {
             margin-top: 20px;
         }
+        .post-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+        .post-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .post-title {
+            font-weight: bold;
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .post-header h3 {
+            margin: 0;
+        }
+        .post-sort {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -62,7 +84,7 @@
         <p sec:authorize="isAuthenticated()" th:text="'로그인 된 사용자: ' + ${#authentication.name}"></p>
     </div>
     <div class="back-link-container">
-        <a th:if="${query != null && !#strings.isEmpty(query)}" th:href="@{/search(query=${query})}" class="btn btn-secondary">목록으로</a>
+        <a th:if="${query != null && !query.isEmpty()}" th:href="@{/search(query=${query})}" class="btn btn-secondary">목록으로</a>
     </div>
     <div class="book-container">
         <div class="book-item">
@@ -75,7 +97,7 @@
                 <p><strong>출판사:</strong> <span th:text="${book.publisher}"></span></p>
                 <p><strong>출간일:</strong> <span th:text="${#dates.format(book.publishDate, 'yyyy-MM-dd')}"></span></p>
                 <p class="book-description" th:text="${book.description}">책 소개 내용</p>
-                <p><strong>정가:</strong> <span th:text="${book.price}"></span>원</p>
+                <p><strong>가격:</strong> <span th:text="${book.price}"></span>원</p>
                 <form th:if="${liked}" th:action="@{/unlike}" method="post">
                     <input type="hidden" name="bookIsbn" th:value="${book.isbn}" />
                     <input type="hidden" name="query" th:value="${query}" />
@@ -86,6 +108,44 @@
                     <input type="hidden" name="query" th:value="${query}" />
                     <button type="submit" class="btn btn-outline-primary mt-3">좋아요</button>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="post-container">
+        <div class="post-tabs">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#reviews">서평 (00)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#usedBooks">중고 (00)</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="reviews" class="tab-pane fade show active">
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+
+                    </div>
+                    <div th:each="post : ${posts}">
+                        <div class="post-item">
+                            <a th:href="@{/post/detail/{id}(id=${post.id})}" style="color: inherit; text-decoration: none;">
+                                <div class="post-details">
+                                    <div class="post-title" th:text="${post.getTitle()}">서평 제목</div>
+                                    <div class="post-meta">
+                                        <span th:text="${book.title}">책 이름</span> |
+                                        <span th:text="${book.author}">지은이</span> |
+                                        <span th:text="${book.publisher}">출판사</span>
+                                    </div>
+                                    <div class="post-content" th:text="${post.getContent()}">서평 내용</div>
+
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div id="usedBooks" class="tab-pane fade">
+                    <!-- 중고 책 관련 내용 여기에 추가 -->
+                </div>
             </div>
         </div>
     </div>
