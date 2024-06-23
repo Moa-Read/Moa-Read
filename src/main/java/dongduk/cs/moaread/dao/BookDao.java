@@ -2,7 +2,6 @@ package dongduk.cs.moaread.dao;
 
 import dongduk.cs.moaread.domain.Book;
 import org.springframework.dao.DataAccessException;
-
 import java.util.List;
 
 public interface BookDao {
@@ -13,4 +12,8 @@ public interface BookDao {
     List<Book> searchBooksByKeyword(String keyword) throws DataAccessException;
 
     List<Book> findTopLikedBooks(int limit) throws DataAccessException;
+
+    List<Book> findBooksLikedByUser(String userId) throws DataAccessException;
+
+    List<Book> findBooksLikedBySimilarUsers(String userId) throws DataAccessException;
 }

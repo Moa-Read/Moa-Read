@@ -5,6 +5,8 @@ import dongduk.cs.moaread.service.LikesService;
 import dongduk.cs.moaread.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,9 +91,15 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public String bookRecommend(Model model) {
-        List<Book> topLikedBooks = bookService.getTopLikedBooks(5);
-        model.addAttribute("todayBooks", topLikedBooks);
+    public String getMainPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        List<Book> books;
+        if (userDetails != null) {
+            String userId = userDetails.getUsername();
+            books = bookService.getBooksLikedBySimilarUsers(userId);
+        } else {
+            books = bookService.getTopLikedBooks(5);
+        }
+        model.addAttribute("todayBooks", books);
         return "main";
     }
 }

@@ -117,4 +117,14 @@ public class BookService {
     public List<Book> getTopLikedBooks(int limit) {
         return bookDao.findTopLikedBooks(limit);
     }
+
+    @Transactional(readOnly = true)
+    public List<Book> getBooksLikedByUser(String userId) {
+        return bookDao.findBooksLikedByUser(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Book> getBooksLikedBySimilarUsers(String userId) {
+        return bookDao.findBooksLikedBySimilarUsers(userId);
+    }
 }

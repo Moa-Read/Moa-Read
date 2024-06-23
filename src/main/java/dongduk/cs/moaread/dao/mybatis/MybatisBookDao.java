@@ -36,4 +36,14 @@ public class MybatisBookDao implements BookDao {
     public List<Book> findTopLikedBooks(int limit) {
         return sqlSession.selectList(NAMESPACE + ".findTopLikedBooks", limit);
     }
+
+    @Override
+    public List<Book> findBooksLikedByUser(String userId) {
+        return sqlSession.selectList(NAMESPACE + ".findBooksLikedByUser", userId);
+    }
+
+    @Override
+    public List<Book> findBooksLikedBySimilarUsers(String userId) {
+        return sqlSession.selectList(NAMESPACE + ".findBooksLikedBySimilarUsers", userId);
+    }
 }

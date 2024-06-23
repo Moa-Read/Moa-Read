@@ -31,4 +31,20 @@
             FETCH FIRST #{limit} ROWS ONLY
     </select>
 
+    <select id="findBooksLikedByUser" resultType="dongduk.cs.moaread.domain.Book">
+        SELECT b.*
+        FROM BOOK b
+                 JOIN LIKES l ON b.ISBN = l.BOOK_ISBN
+        WHERE l.USER_ID = #{userId}
+    </select>
+
+    <select id="findBooksLikedBySimilarUsers" resultType="dongduk.cs.moaread.domain.Book">
+        SELECT DISTINCT b.*
+        FROM BOOK b
+                 JOIN LIKES l1 ON b.ISBN = l1.BOOK_ISBN
+                 JOIN LIKES l2 ON l1.USER_ID = l2.USER_ID
+        WHERE l2.BOOK_ISBN IN (SELECT BOOK_ISBN FROM LIKES WHERE USER_ID = #{userId})
+          AND l1.USER_ID != #{userId}
+    </select>
+
 </mapper>
