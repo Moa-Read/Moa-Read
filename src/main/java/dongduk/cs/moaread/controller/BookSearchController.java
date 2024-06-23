@@ -25,7 +25,8 @@ public class BookSearchController {
     public String searchBooks(@RequestParam String query,
                               @RequestParam(defaultValue = "1") int page,
                               @RequestParam(defaultValue = "sim") String sort,
-                              Model model) {
+                              Model model,
+                              Principal principal) {
         int pageSize = 10;
         List<Book> books = naverBookSearchService.searchBooks(query, sort);
         naverBookSearchService.saveBooks(books);
@@ -43,14 +44,25 @@ public class BookSearchController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("query", query);
         model.addAttribute("sort", sort);
+        if (principal != null) {
+            model.addAttribute("userId", principal.getName());
+        }
         return "search";
     }
 
     @GetMapping("/search/detail")
-    public String getBookDetail(@RequestParam String isbn, @RequestParam String query, Model model) {
+    public String getBookDetail(@RequestParam String isbn, @RequestParam String query, Model model, Principal principal) {
         Book book = naverBookSearchService.getBookDetail(isbn);
         model.addAttribute("book", book);
         model.addAttribute("query", query);
+        if (principal != null) {
+            String userId = principal.getName();
+            boolean liked = likesService.isBookLikedByUser(userId, isbn);
+            model.addAttribute("liked", liked);
+            model.addAttribute("userId", userId);
+        } else {
+            model.addAttribute("liked", false);
+        }
         return "book_detail";
     }
 
@@ -62,6 +74,17 @@ public class BookSearchController {
         }
         String userId = principal.getName();  // 인증된 사용자 이름 가져오기
         likesService.likeBook(userId, bookIsbn);
+        return "redirect:/search/detail?isbn=" + bookIsbn + "&query=" + query;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/unlike")
+    public String unlikeBook(@RequestParam String bookIsbn, @RequestParam String query, Principal principal) {
+        if (principal == null) {
+            return "redirect:/user/login";
+        }
+        String userId = principal.getName();  // 인증된 사용자 이름 가져오기
+        likesService.unlikeBook(userId, bookIsbn);
         return "redirect:/search/detail?isbn=" + bookIsbn + "&query=" + query;
     }
 }

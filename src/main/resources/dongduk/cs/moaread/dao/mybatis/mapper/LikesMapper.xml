@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="dongduk.cs.moaread.dao.mybatis.mapper.LikesMapper">
-    <insert id="insertLike" parameterType="Likes">
+
+    <insert id="insertLike">
         INSERT INTO LIKES (USER_ID, BOOK_ISBN, CREATED_AT)
         VALUES (#{userId}, #{bookIsbn}, CURRENT_TIMESTAMP)
     </insert>
+
+    <delete id="deleteLike">
+        DELETE FROM LIKES WHERE USER_ID = #{userId} AND BOOK_ISBN = #{bookIsbn}
+    </delete>
+
+    <select id="isLiked" resultType="int">
+        SELECT COUNT(*) FROM LIKES WHERE USER_ID = #{userId} AND BOOK_ISBN = #{bookIsbn}
+    </select>
+
 </mapper>
