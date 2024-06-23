@@ -9,6 +9,7 @@
 <div class="text-center p-5">
     <h3 th:text="'서평 도서 - '${book.getTitle()}"></h3>
 </div>
+<nav th:replace="~{form_header :: formHeaderFragment}"></nav>
 <div class="container w-50">
     <form th:action="@{/post/update/${postId}}" th:object="${postDto}" method="post">
         <div class="mb-3">

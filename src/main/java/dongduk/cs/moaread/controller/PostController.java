@@ -4,8 +4,8 @@ import dongduk.cs.moaread.domain.Book;
 import dongduk.cs.moaread.domain.Category;
 import dongduk.cs.moaread.domain.Post;
 import dongduk.cs.moaread.dto.post.request.PostReqDto;
-import dongduk.cs.moaread.service.BookService;
 import dongduk.cs.moaread.service.CategoryService;
+import dongduk.cs.moaread.service.BookService;
 import dongduk.cs.moaread.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final CategoryService categoryService;
-    private final BookService bookService;
+    private final BookService bookSearchService;
 
     /* 서평 등록 Form */
     @PreAuthorize("isAuthenticated()")
