@@ -32,7 +32,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{bookIsbn}")
     public String createPost(@PathVariable String bookIsbn, Model model, Principal principal) {
-        Book book = bookSearchService.getBookDetail(bookIsbn);
+        Book book = bookService.getBookDetail(bookIsbn);
         List<Category> categoryList = categoryService.getCategoryList("/blog/" + principal.getName());
         PostReqDto postReqDto = new PostReqDto();
         postReqDto.setBookIsbn(bookIsbn);
@@ -50,7 +50,7 @@ public class PostController {
     public String createPost(@Valid @ModelAttribute("postDto") PostReqDto postReqDto,
                              BindingResult bindingResult, Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
-            Book book = bookSearchService.getBookDetail(postReqDto.getBookIsbn());
+            Book book = bookService.getBookDetail(postReqDto.getBookIsbn());
             List<Category> categoryList = categoryService.getCategoryList("/blog/" + principal.getName());
 
             model.addAttribute("book", book);
@@ -71,7 +71,7 @@ public class PostController {
     @GetMapping("/update/{id}")
     public String updatePost(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPost(id);
-        Book book = bookSearchService.getBookDetail(post.getBookIsbn());
+        Book book = bookService.getBookDetail(post.getBookIsbn());
         Category category = categoryService.getCategory(post.getCategoryId());
         List<Category> categoryList = categoryService.getCategoryList(principal.getName());
 
@@ -127,7 +127,7 @@ public class PostController {
     @GetMapping("/detail/{id}")
     public String getPost(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPost(id);
-        Book book = bookSearchService.getBookDetail(post.getBookIsbn());
+        Book book = bookService.getBookDetail(post.getBookIsbn());
         Category category = categoryService.getCategory(post.getCategoryId());
 
         boolean isOwner = false;
